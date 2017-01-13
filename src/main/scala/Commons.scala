@@ -1,4 +1,5 @@
 import scala.collection.mutable.ListBuffer
+import scala.io.Source
 
 
 object Commons {
@@ -50,5 +51,30 @@ object Commons {
 
   def isPalindrome( s : String ) : Boolean = {
     s.equals( s.reverse )
+  }
+  
+  def divisors( n : BigInt ) : List[BigInt] = {
+    
+    val divs = ListBuffer[BigInt]()
+    
+    // always start with 1 and the number
+    divs += 1
+    divs += n
+    
+    for( i <- 2 to scala.math.sqrt(n.toDouble).toInt ){
+      
+      if( n % i == 0 ){
+        divs += i
+        divs += n / i
+      }
+      
+    }
+    
+    divs.toList.sorted
+  }
+  
+  def readLines( fname : String ) : List[String] = {
+    val l =  Source.fromFile( fname )
+    l.getLines().toList
   }
 }
