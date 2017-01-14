@@ -73,6 +73,10 @@ object Commons {
     divs.toList.sorted
   }
   
+  def properDivisors( n : BigInt ) : List[BigInt] = {
+    divisors(n).toSet.filter( _ != n ).toList
+  }
+
   def readLines( fname : String ) : List[String] = {
     val l =  Source.fromFile( fname )
     l.getLines().toList
@@ -111,5 +115,13 @@ object Commons {
     
     
     ttl
+  }
+  
+  def isAbundant( n : BigInt ) : Boolean = {
+    val divs = properDivisors(n)
+    
+    val sum = divs.foldLeft(BigInt(0))( (a:BigInt,b:BigInt) => { a + b } )
+    
+    sum > n 
   }
 }
