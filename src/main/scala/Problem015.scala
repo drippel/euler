@@ -11,8 +11,12 @@ object Problem015 {
   
   def main( args : Array[String] ) : Unit = {
     Console.println("015...")
-    solve( (18,18), (20,20) )
-    Console.println( solutions )
+    
+    // solve( (20,19), (20,20) )
+    // solve( (18,18), (20,20) )
+    Console.println( solve( (0,0), (20,20) ) )
+    solveLong( (0,0), (20,20) )
+    Console.println("solution:"+ solutions)
   }
   
   class Move( val x : Int, val y : Int )
@@ -22,27 +26,48 @@ object Problem015 {
   
   val MIN = 0
   val MAX = 20
+  
+  val counts : HashMap[(Int,Int),Int] = {
+    val h = HashMap[(Int,Int),Int]() 
+    h += (19,20) -> 1
+    h += (20,19) -> 1
+  }
+  val totalPaths = 0
+  
+  def solve( start : (Int,Int), goal : (Int,Int)  ) : Int = {
+    
+    counts.get( start ) match {
+      case s : Some[Int] => {
+        s.get 
+      }
+      case None => {
+        
+        val ms = generate( start )
+        val c = ms.map( solve( _, goal ) )
+        
+        val ttl = c.foldLeft(0)( (a:Int,b:Int) => { a + b } )
+        counts.put(start, ttl)
+        ttl
+        
+      }
+    }
+    
+  }
+
   var solutions = BigInt(0)
-  
-  val counts = HashMap[(Int,Int),Int]()
-  
-  def solve( start : (Int,Int), goal : (Int,Int)  ) : Unit = {
+  def solveLong( start : (Int,Int), goal : (Int,Int)  ) : Unit = {
     
     if( start._1 == goal._1 && start._2 == goal._2 ){
       solutions = solutions + 1
+      if( solutions % 100000 == 0 ){
+        Console.println(solutions)
+      }
     }
     else {
       // create some moves - and solve them
       val ms = generate( start )
-      if( ms.isEmpty ){
-        //
-        Console.println( "wha" )
-      }
-      else {
-        ms.foreach( solve( _, goal ) )
-      }
+      ms.foreach( solveLong( _, goal ) )
     }
-    
   }
   
   def generate( start : (Int,Int) ) : List[(Int,Int)] = {

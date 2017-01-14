@@ -99,4 +99,17 @@ object Commons {
     inner( List(n) )
 
   }
+  
+  
+  def factorial( n : BigInt ) : BigInt = {
+    
+    var ttl = BigInt(1)
+    
+    for( i <- n until 1 by -1 ){
+      ttl = ttl * i
+    }
+    
+    
+    ttl
+  }
 }
