@@ -14,62 +14,39 @@ import java.util.regex.Pattern
 
 object Problem031 {
   
-  val denoms = List(100,50,20,10, 5,  2,  1)
-  val max    = List(  2, 4,10,20,40,100,200)
-  val amounts = List(0,0,0,0,0,0,0)
+  val denoms = List(1,2,5,10,20,50,100)
   
   def main( args : Array[String] ) : Unit = {
 
     Console.println("031...")
     
-    /*
-    val l = List(1,1,2,0,1,1,3)
-    Console.println( sum( l ) )
-    */
+    Console.println( solve( 200, denoms ) )
     
-    // add 1
-    for( i <- 0 until denoms.size ){ 
-      solve( List(0,0,0,0,0,0,0), i )
-    }
-    
-    Console.println(solutions.size + 1)
   }
   
-  var solutions = HashSet[List[Int]]()
+  var solutions = 0
   
-  def solve( amts : List[Int], slot : Int ) : Unit = {
+  // count down approach
+  def solve( amount : Int, coins : List[Int] ) : Int = {
     
-    val s = sum( amts )
-    if( s == 200 ){
-      // found
-      Console.println( amts )
-      solutions += amts
-    }
-    else if( s > 200 ){
-      // stop  
-    }
-    else {
-      // add one in the current slot, solve
-      solve( addSlot(amts,slot), slot ) 
-      
-      if( (slot + 1) < amts.size ){
-        // add one in the next slot, solve
-        solve( addSlot(amts,(slot+1) ), slot + 1 )
+    def inner( iamount : Int, icoins : List[Int], accum : Int ) : Int = {
+      if( iamount == 0 ){ accum + 1 }
+      else if( iamount < 0 ){ accum }
+      else {
+        inner( iamount - icoins.head, icoins, accum + solve( iamount, icoins.tail ) )
       }
       
     }
     
+    if( amount == 0 ){ 1 }
+    else if( amount < 0 ){ 0 }
+    else if( coins.isEmpty ){ 0 }
+    else { 
+      inner( amount, coins, 0 ) 
+    }
+    
   }
   
-  def addSlot( amts : List[Int], slot : Int ) : List[Int] = {
-    
-    val namts = ListBuffer[Int]()
-    namts ++= amts
-    namts(slot) = namts(slot) + 1
-    namts.toList
-    
-  }
-
   def sum( l : List[Int] ) = {
     val z = denoms.zip(l)
     z.foldLeft(0)( (a:Int,t:(Int,Int)) => { a + ( t._1 * t._2 ) } )
