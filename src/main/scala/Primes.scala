@@ -6,6 +6,39 @@ object Primes {
 
   var primeSet = HashSet[BigInt]()
   var lastPrime = BigInt(0)
+
+  def isPrime2( n : BigInt ) : Boolean = {
+
+    var s = 0
+    
+    for( i <- 1 to ((n / 2).toInt + 1 ) ){
+      if( (i * i) > n ){
+        s = i
+      }
+    }
+    
+    var done = false
+    var prime = true
+    var d = 2
+    
+    while( !done ){
+      
+      if( n % d == 0 ){
+        prime = false
+        done = true
+      }
+      
+      d = d + 1
+      if( d > s ){
+        done = true
+      }
+
+      
+    }
+    
+    prime 
+    
+  }
   
   def isPrime( n : BigInt ) : Boolean = {
     
