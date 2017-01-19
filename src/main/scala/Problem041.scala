@@ -19,7 +19,7 @@ object Problem041 {
 
     Console.println("041...")
     
-    val start = "123456789"
+    val start = "1234567"
     
     val ps = start.permutations.toList
     Console.println( "perms:"+ ps.size )
@@ -34,10 +34,9 @@ object Problem041 {
     Console.println( "odds:"+ odds.size )
 
     val primes = odds.toList.sorted.reverse.find( (n:Int) => {  
-      Console.println( "t:"+ n )
+      //Console.println( "t:"+ n )
       isPrime2( n ) 
     })
-    
     Console.println(primes)
     
     

@@ -8,35 +8,28 @@ object Primes {
   var lastPrime = BigInt(0)
 
   def isPrime2( n : BigInt ) : Boolean = {
-
-    var s = 0
     
-    for( i <- 1 to ((n / 2).toInt + 1 ) ){
-      if( (i * i) > n ){
-        s = i
-      }
-    }
-    
+    val sq = scala.math.sqrt(n.toDouble)
+    var prime = true 
     var done = false
-    var prime = true
-    var d = 2
+    var i = 2
     
     while( !done ){
       
-      if( n % d == 0 ){
+      if( n % i == 0 ){
         prime = false
         done = true
       }
       
-      d = d + 1
-      if( d > s ){
+      if( i >= sq ){
         done = true
       }
-
-      
+      else {
+        i = i + 1
+      }
     }
     
-    prime 
+    prime
     
   }
   
