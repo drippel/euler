@@ -19,24 +19,56 @@ object Problem049 {
 
     Console.println("049...")
     
+    /*
     val start = "1234567890"
-    
     val combs = combinations(start,4).sorted
     combs.foreach( Console.println( _ ) )
+    */
+    isPrime(10001)
+    
+    val nums = for( i <- 1000 to 9999 ) yield { i }
+    val ps = nums.toList.filter( isPrime(_) )
+    val pss = ps.map( _.toString )
+    
+    val ms = pss.map( (s:String) => { findMatches(s, pss ).sorted } )
+    val mss = ms.filter( _.size >= 3 ).toSet
+    // mss.foreach( Console.println( _ ) )
+    
+    val l = List(1487, 1847, 4817, 4871, 7481, 7841, 8147, 8741)
+    Console.println( findEquidistant(l) )
+    
+    for( m <- mss ){
+      val is = m.map( _.toInt )
+      Console.println( findEquidistant(is) )
+    }
+    
    
   }
   
-  def combinations( start : String, size : Int ) : List[String] = {
-    val all = HashSet[String]()
-    val combs = start.combinations(size)
+  def findMatches( src : String, ss : List[String] ) : List[String] = {
+    for( s <- ss; if( src.diff(s).isEmpty() ) ) yield { s }
+  }
+  
+  def findEquidistant( is : List[Int] ) : List[List[Int]] = {
     
-    for( c <- combs ){
-      val cp = c.permutations
-      for( cpp <- cp ){
-        all += cpp
+    val diffs = for( i <- 0 until is.size - 1; j <- i + 1 until is.size ) yield {
+      val i1 = is(i)
+      val i2 = is(j)
+      val d1 = i2.toInt - i1.toInt
+      
+      val i3 = i2.toInt + d1
+      if( is.contains(i3) ){
+        Some( i1, i2, i3 )
+      }
+      else {
+        None
       }
     }
-    all.toList
+    
+    val f = diffs.toList.flatten
+    
+    f.map( (t:(Int,Int,Int)) => { List( t._1, t._2, t._3 ) } )
+
   }
   
 }
