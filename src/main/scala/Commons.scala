@@ -124,4 +124,14 @@ object Commons {
     
     sum > n 
   }
+  
+  def sumDigits( n : BigInt ) : BigInt = {
+    
+    val s = n.toString
+    
+    s.foldLeft(BigInt(0))( (a:BigInt,c:Char) => {
+      a + ( c.toInt - 48 )
+    } )
+    
+  }
 }
