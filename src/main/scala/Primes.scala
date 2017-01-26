@@ -45,6 +45,8 @@ object Primes {
       }
       else {
         // rebuild the primes and ask again
+        // we shouldn't have to rebuild all primes again
+        // just from the end of the current list to the target num
         buildPrimes( n.toInt + 1 )
         primeSet.contains(n)
       }
