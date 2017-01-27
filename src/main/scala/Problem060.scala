@@ -22,12 +22,9 @@ object Problem060 {
     Console.println( "060..." )
 
     buildPrimes( 1501 )
-    // Console.println(Primes.primeSet.size)
     val primeList = Primes.primeSet.toList.sorted.tail
     solve( primeList )
-    // val t = List[BigInt](3, 5, 7, 11, 13)
-    // Console.println( solve(t) )
-    // Console.println( knownNonPrimes )
+
   }
 
   val knownNonPrimes = ListBuffer[List[BigInt]]()
@@ -46,6 +43,7 @@ object Problem060 {
         Console.println( "testing:" + comb )
         Console.println( count )
         Console.println( "current:" + lo +" "+ winner )
+        Console.println( "non:" + knownNonPrimes.size )
       }
       count = count + 1
 

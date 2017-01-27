@@ -21,17 +21,55 @@ object Problem060a {
 
     Console.println( "060a..." )
     
-    buildPrimes(1501)
-    Console.println( Primes.primeSet.size )
-    val s = Primes.primeSet.toList.sorted.tail
-    // Console.println( s.head +" "+ s.tail )
-    val combs = s.combinations(5)
+    buildPrimes(99011009)
+
+    Console.println( (new Date()).getTime )
+
+    val allPrimes = Primes.primeSet.filter( _ <= 9001 ).toList.sorted.tail
+    Console.println(allPrimes.size)
+    var ps = allPrimes.map( Set(_) ).toSet
     
-    for( c <- combs ){
-      Console.println( c )
+    for( i <- 0 until 4 ){
+      ps = build( ps, allPrimes )
     }
-    
+
+    Console.println( (new Date()).getTime )
+    Console.println( ps )
+    Console.println( ps.size )
 
   }
+  
+  def build( start : Set[Set[BigInt]], all : List[BigInt] ) : Set[Set[BigInt]] = {
+    
+    val out = HashSet[Set[BigInt]]()
+    
+    for( s <- start ){
+      for( a <- all if( a > s.last ) ){
+          val n = (s + a)
+          if( primesOnly( n ) ){
+            out += n
+          }
+      }
+    }
+    
+    
+    out.toSet
+    
+  }
 
+  def primesOnly( is: Set[BigInt] ): Boolean = {
+    // Console.println(is)
+    val combs = is.toList.combinations( 2 )
+    combs.forall( isPrime( _ ) )
+  }
+
+  def isPrime( ps: List[BigInt] ): Boolean = {
+
+    val c1 = ps( 0 ).toString + ps( 1 ).toString
+    val c2 = ps( 1 ).toString + ps( 0 ).toString
+
+    // if this combination is not prime - we can filter out the non prime combos
+    ( Primes.isPrime( BigInt( c1 ) ) && Primes.isPrime( BigInt( c2 ) ) )
+  }
+  
 }
