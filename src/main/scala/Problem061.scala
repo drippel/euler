@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils
 import scala.collection.mutable.BitSet
 import java.io.FileWriter
 import scala.collection.mutable.PriorityQueue
+import scala.collection.immutable.Stack
 
 object Problem061 {
 
@@ -43,7 +44,7 @@ object Problem061 {
   val sets = HashMap[String,List[BigInt]]()
 
   case class Step( n : BigInt, set : String )
-  case class Path( steps : List[Step] )
+  case class Path( steps : List[Step], left : List[String] )
   
   class BySize() extends Ordering[Path] {
       def compare( p1 : Path, p2 : Path ) : Int = {
@@ -60,12 +61,14 @@ object Problem061 {
   
   def bootstrap() : List[Path] = {
     
+    val left = List( "TRI", "SQS","PEN","HEX","HEP","OCT" )
+    
     val bpaths = ListBuffer[Path]()
     
-    for( s <- sets ){
+    for( t <- sets.get("TRI").get ){
       // bootstrap the queue from one the sets
-      val bsteps = s._2.map( (b:BigInt) => { Step( b, s._1 ) } )
-      bsteps.foreach( (st:Step) => { bpaths += Path( List( st ) ) } )
+      val step = Step( t, "TRI" )
+      bpaths += Path( List( step ), left )
     }
     
     bpaths.toList
@@ -90,33 +93,36 @@ object Problem061 {
       Console.println( current )
     
       // is it a solution?
-      if( current.steps.size == 6 ){
-        solved = Some(current)
+      if( current.steps.size == 7 ){
+        if( current.steps.head.n == current.steps.last.n ){ 
+          solved = Some(current)
+        }
       }
       else {
-    
-        // for each set not in the current path
-        val left = sets.keySet.diff(toSets(current))
         
-        // find possible matches
-        for( l <- left ){
+        // for current look for matches in the next set
+        val nextset = current.left.head
+        
+        val ms = findMatches( current, sets.get(nextset).get )
+        
+        for( m <- ms ){
           
-          val ms = findMatches( current, sets.get(l).get )
+          // make a new step and path
+          val st = Step( m, nextset )
+          val path = Path( current.steps :+ st, current.left.tail )
+          work.enqueue(path)
           
-          for( m <- ms ){
-            // queue those new paths
-            val s = Step( m, l )
-            work.enqueue( Path( current.steps :+ s ) )
-          }
-
         }
-    
+        
       }
     }
     
     Console.println( "solution:"+ solved.get )
     
-    Console.println( solved.get.steps.foldLeft(BigInt(0))( (a:BigInt,s:Step) => { a + s.n } ) )
+    var sum = solved.get.steps.foldLeft(BigInt(0))( (a:BigInt,s:Step) => { a + s.n } ) 
+    sum = sum - solved.get.steps.last.n
+    Console.println( sum ) 
+
     
   }
   
